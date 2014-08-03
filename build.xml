@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Liquibase demo">
+
+	<property file="param.properties" />
+	<property environment="env" />
+	<property name="mvn.home" value="${env.M2_HOME}" />
+
+	<condition property="mvn.executable" value="${mvn.home}/bin/mvn">
+		<os family="mac" />
+	</condition>
+
+	<condition property="mvn.executable" value="${mvn.home}/bin/mvn.bat">
+		<os family="windows" />
+	</condition>
+
+	<condition property="mvn.executable" value="${mvn.home}/bin/mvn.sh">
+		<os family="unix" />
+	</condition>
+
+	<target name="mvn_liquibase_update">
+		<echo message="Running scripts..." />
+		<exec executable="${mvn.executable}">
+			<arg line="install -Pupdate -Dliquibase.driver=${driver} -Dliquibase.username=${username} -Dliquibase.password=${password} -Dliquibase.url=${url} -Dliquibase.changeLogFile=${changeLogFile} -Dliquibase.promptOnNonLocalDatabase=false" />
+		</exec>
+	</target>
+
+	<target name="mvn_liquibase_rollback">
+		<echo message="Running rollback scripts..." />
+		<exec executable="${mvn.executable}">
+			<arg line="install -Prollback -Dliquibase.rollbackTag=${tag} -Dliquibase.driver=${driver} -Dliquibase.username=${username} -Dliquibase.password=${password} -Dliquibase.url=${url} -Dliquibase.changeLogFile=${changeLogFile} -Dliquibase.promptOnNonLocalDatabase=false" />
+		</exec>
+	</target>
+
+	<target name="mvn_liquibase_tag">
+		<echo message="Tagging..." />
+		<exec executable="${mvn.executable}">
+			<arg line="install -Ptag -Dliquibase.tag=${tag} -Dliquibase.driver=${driver} -Dliquibase.username=${username} -Dliquibase.password=${password} -Dliquibase.url=${url} -Dliquibase.changeLogFile=${changeLogFile} -Dliquibase.promptOnNonLocalDatabase=false" />
+		</exec>
+	</target>
+
+</project>
