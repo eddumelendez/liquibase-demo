@@ -1,0 +1,29 @@
+== Liquibase Demo
+
+* Create MySQL database 'liquibase-demo'
+
+[source, bash]
+----
+docker run --name liquibase-demo -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=liquibase_demo -p 3306:3306 mysql:5.6
+----
+
+* Perform script execution
+
+[source, bash]
+----
+./mvnw install -Pupdate -Dliquibase.propertyFile=param.properties
+----
+
+*  Perform tag 1.0.0
+
+[source, bash]
+----
+./mvnw install -Ptag -Dliquibase.propertyFile=param.properties -Dliquibase.tag=1.0.0
+----
+
+* Perform rollback
+
+[source, bash]
+----
+./mvnw install -Prollback -Dliquibase.propertyFile=param.properties -Dliquibase.rollbackTag=1.0.0
+----
